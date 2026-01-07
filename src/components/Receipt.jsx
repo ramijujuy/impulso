@@ -75,7 +75,7 @@ const Receipt = ({ data }) => {
                     <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Recibido de:</span> {payerName}
                 </div>
                 <div style={{ padding: '5px 10px', textAlign: 'center', fontWeight: 'bold', color: '#5D4037' }}>
-                    CREDITO CANCELADO
+                    PAGADO
                 </div>
             </div>
 
