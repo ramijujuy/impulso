@@ -907,6 +907,26 @@ const Persons = () => {
                     />
                   </div>
 
+                  <div>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Estado Manual (Opcional)</label>
+                    <select
+                      value={editFormData.status || ""}
+                      onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
+                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                    >
+                      <option value="">-- Automático (Basado en Chequeos) --</option>
+                      <option value="Pending">Pendiente</option>
+                      <option value="Approved">Aprobado</option>
+                      <option value="Rejected">Rechazado</option>
+                      <option value="Active">Activo</option>
+                      <option value="Active Loan">Préstamo Activo</option>
+                      <option value="Moroso">Moroso</option>
+                    </select>
+                    <p style={{ fontSize: "12px", color: "#6b7280", marginTop: "4px" }}>
+                      * Seleccione un estado para forzarlo manualmente. Deje en "Automático" para usar las verificaciones.
+                    </p>
+                  </div>
+
                   <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: "16px" }}>
                     <h4 style={{ fontSize: "14px", color: "#6b7280", textTransform: "uppercase", marginBottom: "12px" }}>Verificaciones</h4>
                     <div style={{ display: "grid", gap: "12px" }}>

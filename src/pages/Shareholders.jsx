@@ -467,6 +467,8 @@ const Shareholders = () => {
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Accionista</th>
                   <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">DNI</th>
+                  <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Cap. Recuperado</th>
+                  <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Interés Ganado</th>
                   <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Ganancia Total</th>
                   <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Detalles</th>
                 </tr>
@@ -476,8 +478,14 @@ const Shareholders = () => {
                   <tr key={idx} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{p.shareholder.fullName}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{p.shareholder.dni}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700 text-right">
+                      ${p.totalCapitalRecovered?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600 text-right">
                       ${p.totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600 text-right">
+                      ${(p.totalProfit + (p.totalCapitalRecovered || 0)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                       <details className="group inline-block text-left">
@@ -490,13 +498,14 @@ const Shareholders = () => {
                         <div className="absolute mt-2 w-64 bg-white p-3 rounded-lg shadow-xl border border-gray-100 z-10 max-h-60 overflow-y-auto right-10">
                           <h5 className="text-xs font-bold text-gray-500 uppercase mb-2">Desglose de Pagos</h5>
                           {p.details.map((d, i) => (
-                            <div key={i} className="flex justify-between py-2 border-b border-gray-100 last:border-0 text-xs">
-                              <span className="text-gray-600">
+                            <div key={i} className="flex justify-between py-2 border-b border-gray-100 last:border-0 text-xs text-right gap-2">
+                              <span className="text-gray-600 text-left w-20">
                                 {profitType === 'projected'
                                   ? `Vence: ${new Date(d.dueDate).toLocaleDateString()}`
                                   : `Pagado: ${new Date(d.paidDate).toLocaleDateString()}`}
                               </span>
-                              <span className="font-medium text-green-600">+${d.profit.toFixed(2)}</span>
+                              <span className="text-gray-500" title="Capital">Cap: ${d.capitalRecovered?.toFixed(2)}</span>
+                              <span className="font-medium text-green-600" title="Interés">Int: +${d.profit.toFixed(2)}</span>
                             </div>
                           ))}
                         </div>

@@ -413,10 +413,10 @@ const Groups = () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${g.status === "Active" || g.status === "Approved" ? "bg-green-100 text-green-800" :
-                          g.status === "Active Loan" ? "bg-blue-100 text-blue-800" :
-                            g.status === "Moroso" || g.status === "Rejected" ? "bg-red-100 text-red-800" :
-                              g.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
-                                "bg-gray-100 text-gray-800"
+                        g.status === "Active Loan" ? "bg-blue-100 text-blue-800" :
+                          g.status === "Moroso" || g.status === "Rejected" ? "bg-red-100 text-red-800" :
+                            g.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
+                              "bg-gray-100 text-gray-800"
                         }`}>
                         {g.status === "Active" ? "Activo" :
                           g.status === "Active Loan" ? "Préstamo Activo" :
@@ -743,7 +743,7 @@ const Groups = () => {
             <h3 className="text-lg font-bold text-gray-900 mb-4">Editar Estado</h3>
             <select
               defaultValue={editStatusModal.currentStatus}
-              onChange={(e) => handleUpdateStatus(editStatusModal.groupId, e.target.value)}
+              id="statusSelect"
               className="w-full p-2 mb-4 border border-gray-300 rounded-md"
             >
               <option value="Active">Activo (Sin Préstamo)</option>
@@ -760,6 +760,12 @@ const Groups = () => {
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 text-sm font-medium"
               >
                 Cancelar
+              </button>
+              <button
+                onClick={() => handleUpdateStatus(editStatusModal.groupId, document.getElementById('statusSelect').value)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+              >
+                Guardar
               </button>
             </div>
           </div>
