@@ -30,7 +30,7 @@ const Shareholders = () => {
 
   useEffect(() => {
     fetchShareholders();
-  }, []);
+  }, [token]);
 
   const fetchShareholders = async () => {
     try {

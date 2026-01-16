@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 
 const Loans = () => {
   const { user, loading } = useContext(AuthContext);
-  const { token } = useContext(AuthContext); // Ensure token is available if needed for headers
+  // const { token } = useContext(AuthContext); // Removed unused token
   const [loans, setLoans] = useState([]);
   const [groups, setGroups] = useState([]);
   const [shareholders, setShareholders] = useState([]);
@@ -545,7 +545,7 @@ const Loans = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {selectedLoanForDetails.memberDetails && selectedLoanForDetails.memberDetails.map((detail, idx) => {
-                      const totalDebt = detail.installments?.reduce((sum, inst) => sum + (inst.amount || 0), 0) || 0;
+                      // const totalDebt = detail.installments?.reduce((sum, inst) => sum + (inst.amount || 0), 0) || 0; // Unused
                       const pendingDebt = detail.installments?.filter(i => i.status !== 'paid').reduce((sum, inst) => sum + (inst.amount || 0), 0) || 0;
 
                       return (

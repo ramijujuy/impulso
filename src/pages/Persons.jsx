@@ -151,21 +151,11 @@ const Persons = () => {
     return matchesDni && matchesGroup && matchesStatus;
   });
 
+  /* 
   const handleExport = () => {
-    const dataToExport = filteredPersons.map(p => ({
-      Nombre: p.fullName,
-      DNI: p.dni,
-      Dirección: p.address,
-      Grupo: p.group ? p.group.name : "Sin Grupo",
-      Estado: p.status || "Pending",
-      "Estado Financiero": p.financialStatus
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
-    XLSX.writeFile(workbook, "personas.xlsx");
-  };
+    // ... exported removed as requested
+  }; 
+  */
 
   const getStatusColor = (status) => {
     switch (status) {
