@@ -20,8 +20,12 @@ const Home = () => {
             const headers = { Authorization: `Bearer ${token}` };
 
             // Fetch all data in parallel
+            // Base URL configuration (matches logic in src/index.js)
+            const API_URL = process.env.REACT_APP_API_URL || "https://financieraback.vercel.app";
+
             // Helper to handle fetch errors
-            const fetchJson = async (url) => {
+            const fetchJson = async (endpoint) => {
+                const url = `${API_URL}${endpoint}`;
                 const res = await fetch(url, { headers });
                 const text = await res.text();
                 try {
