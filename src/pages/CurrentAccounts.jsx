@@ -262,6 +262,10 @@ const CurrentAccounts = () => {
             });
             XLSX.writeFile(XLSX.utils.json_to_sheet(dataToExport), "cobranzas.xlsx");
         }
+
+        if (dataToExport.length === 0) {
+            alert("No hay datos para exportar. Por favor verifica los filtros o que existan cuentas cargadas.");
+        }
     }
 
 

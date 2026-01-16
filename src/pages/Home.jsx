@@ -20,13 +20,24 @@ const Home = () => {
             const headers = { Authorization: `Bearer ${token}` };
 
             // Fetch all data in parallel
+            // Helper to handle fetch errors
+            const fetchJson = async (url) => {
+                const res = await fetch(url, { headers });
+                const text = await res.text();
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error(`Error en ${url}: Respuesta no válida (posible HTML/404)`);
+                }
+            };
+
             const [usersRes, personsRes, groupsRes, loansRes, accountsRes, shareholdersRes] = await Promise.all([
-                fetch('/api/users', { headers }).then(r => r.json()),
-                fetch('/api/persons', { headers }).then(r => r.json()),
-                fetch('/api/groups', { headers }).then(r => r.json()),
-                fetch('/api/loans', { headers }).then(r => r.json()),
-                fetch('/api/current-accounts', { headers }).then(r => r.json()),
-                fetch('/api/shareholders', { headers }).then(r => r.json())
+                fetchJson('/api/users'),
+                fetchJson('/api/persons'),
+                fetchJson('/api/groups'),
+                fetchJson('/api/loans'),
+                fetchJson('/api/current-accounts'),
+                fetchJson('/api/shareholders')
             ]);
 
             const wb = XLSX.utils.book_new();
