@@ -269,8 +269,10 @@ const Groups = () => {
       appliedSearch.status === "all"
         ? true
         : appliedSearch.status === "inactive"
-          ? g.status !== "Active" && g.status !== "Active Loan" && g.status !== "Approved" && g.status !== "Moroso" && g.status !== "Pending"
-          : g.status === appliedSearch.status;
+          ? g.status !== "Active" && g.status !== "Active Loan" && g.status !== "Approved" && !g.isMoroso && g.status !== "Pending"
+          : appliedSearch.status === "Moroso"
+            ? g.isMoroso
+            : g.status === appliedSearch.status;
     const matchesSearch =
       appliedSearch.name === ""
         ? true
@@ -412,22 +414,28 @@ const Groups = () => {
                       </button>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${g.status === "Active" || g.status === "Approved" ? "bg-green-100 text-green-800" :
-                        g.status === "Active Loan" ? "bg-blue-100 text-blue-800" :
-                          g.status === "Moroso" || g.status === "Rejected" ? "bg-red-100 text-red-800" :
-                            g.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
-                              "bg-gray-100 text-gray-800"
-                        }`}>
-                        {g.status === "Active" ? "Activo" :
-                          g.status === "Active Loan" ? "Préstamo Activo" :
-                            g.status === "Moroso" ? "Moroso" :
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${g.status === "Active" || g.status === "Approved" ? "bg-green-100 text-green-800" :
+                          g.status === "Active Loan" ? "bg-blue-100 text-blue-800" :
+                            g.status === "Rejected" ? "bg-red-100 text-red-800" :
+                              g.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
+                                "bg-gray-100 text-gray-800"
+                          }`}>
+                          {g.status === "Active" ? "Activo" :
+                            g.status === "Active Loan" ? "Préstamo Activo" :
                               g.status === "Approved" ? "Aprobado" :
                                 g.status === "Rejected" ? "Rechazado" :
                                   g.status === "Pending" ? "Pendiente" : "Inactivo"}
-                      </span>
+                        </span>
+                        {g.isMoroso && (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
+                            ⚠ Moroso
+                          </span>
+                        )}
+                      </div>
                       <button
                         onClick={() => setEditStatusModal({ groupId: g._id, currentStatus: g.status })}
-                        className="ml-2 text-gray-400 hover:text-gray-600 text-xs"
+                        className="ml-2 text-gray-400 hover:text-gray-600 text-xs mt-1"
                         title="Editar estado"
                       >
                         ✎
