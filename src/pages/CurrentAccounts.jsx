@@ -249,7 +249,10 @@ const CurrentAccounts = () => {
                     });
                 });
             });
-            XLSX.writeFile(XLSX.utils.json_to_sheet(dataToExport), `cuentas_${viewType === 'person' ? 'individuales' : 'grupales'}.xlsx`);
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Cuentas");
+            XLSX.writeFile(wb, `cuentas_${viewType === 'person' ? 'individuales' : 'grupales'}.xlsx`);
         } else {
             // Export collections
             collections.forEach(col => {
@@ -260,7 +263,10 @@ const CurrentAccounts = () => {
                     Monto: col.installment.amount
                 });
             });
-            XLSX.writeFile(XLSX.utils.json_to_sheet(dataToExport), "cobranzas.xlsx");
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Cobranzas");
+            XLSX.writeFile(wb, "cobranzas.xlsx");
         }
 
         if (dataToExport.length === 0) {

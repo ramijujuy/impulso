@@ -27,7 +27,8 @@ const Home = () => {
                 try {
                     return JSON.parse(text);
                 } catch (e) {
-                    throw new Error(`Error en ${url}: Respuesta no válida (posible HTML/404)`);
+                    console.error(`Error parsing JSON from ${url}:`, text.slice(0, 100));
+                    throw new Error(`Error en ${url}: Recibido HTML/Texto en lugar de JSON. Inicio: ${text.slice(0, 20)}...`);
                 }
             };
 
