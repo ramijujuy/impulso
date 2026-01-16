@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 
@@ -30,9 +30,9 @@ const Shareholders = () => {
 
   useEffect(() => {
     fetchShareholders();
-  }, [token]);
+  }, [fetchShareholders]);
 
-  const fetchShareholders = async () => {
+  const fetchShareholders = useCallback(async () => {
     try {
       const res = await axios.get("/api/shareholders", {
         headers: { Authorization: `Bearer ${token}` }
@@ -42,7 +42,7 @@ const Shareholders = () => {
       console.error(error);
       setMsg("❌ Error al cargar accionistas");
     }
-  };
+  }, [token]);
 
   const fetchShareholderAccount = async (shareholderId) => {
     try {

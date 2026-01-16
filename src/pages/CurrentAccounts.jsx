@@ -7,7 +7,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 
 const CurrentAccounts = () => {
-  const { token } = useContext(AuthContext);
+  // const { token } = useContext(AuthContext); // Unused
   const location = useLocation();
   const personId = new URLSearchParams(location.search).get("personId");
   const [activeTab, setActiveTab] = useState("accounts"); // accounts | collections

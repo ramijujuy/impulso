@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
-import * as XLSX from "xlsx";
+// import * as XLSX from "xlsx"; // Unused
 
 const Persons = () => {
   const { user, loading, token } = useContext(AuthContext);
