@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
-// import * as XLSX from "xlsx"; // Unused
 
 const Persons = () => {
   const { user, loading, token } = useContext(AuthContext);
@@ -28,9 +27,12 @@ const Persons = () => {
     setIsEditing(false);
     setSelectedPersonAccount(null);
     try {
-      const res = await axios.get(`/api/current-accounts/person/${person._id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get(
+        `/api/current-accounts/person/${person._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setSelectedPersonAccount(res.data.data);
     } catch (error) {
       // It's okay if they don't have an account
@@ -45,11 +47,17 @@ const Persons = () => {
 
       // 1. Update basic details (excluding group)
       const { group, ...details } = editFormData;
-      let res = await axios.put(`/api/persons/${selectedPerson._id}`, details, config);
+      let res = await axios.put(
+        `/api/persons/${selectedPerson._id}`,
+        details,
+        config
+      );
       let updatedPerson = res.data.data;
 
       // 2. Check if group changed
-      const currentGroupId = selectedPerson.group ? selectedPerson.group._id : "";
+      const currentGroupId = selectedPerson.group
+        ? selectedPerson.group._id
+        : "";
       const newGroupId = editFormData.group || "";
 
       if (currentGroupId !== newGroupId) {
@@ -63,7 +71,9 @@ const Persons = () => {
       }
 
       // Update local state with the final updated person (which has the correct status)
-      setPersons(persons.map(p => p._id === updatedPerson._id ? updatedPerson : p));
+      setPersons(
+        persons.map((p) => (p._id === updatedPerson._id ? updatedPerson : p))
+      );
       setSelectedPerson(updatedPerson);
       setIsEditing(false);
       setMsg("Persona actualizada correctamente");
@@ -108,10 +118,14 @@ const Persons = () => {
     setMsg(null);
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const res = await axios.post("/api/persons", {
-        ...newPerson,
-        group: newPerson.group || null,
-      }, config);
+      const res = await axios.post(
+        "/api/persons",
+        {
+          ...newPerson,
+          group: newPerson.group || null,
+        },
+        config
+      );
       setPersons([res.data.data, ...persons]);
       if (newPerson.group) {
         const groupsRes = await axios.get("/api/groups");
@@ -135,18 +149,14 @@ const Persons = () => {
   const filteredPersons = persons.filter((p) => {
     const matchesDni = p.dni.includes(searchDni);
     const matchesGroup =
-      filterGroup === "all"
-        ? true
-        : p.group && p.group._id === filterGroup;
-    // Assuming 'status' field exists or deriving it. 
+      filterGroup === "all" ? true : p.group && p.group._id === filterGroup;
+    // Assuming 'status' field exists or deriving it.
     // If no status field, we might filter by financialStatus or similar.
-    // For now, let's assume financialStatus is what we want to filter by, 
+    // For now, let's assume financialStatus is what we want to filter by,
     // or if there's an approval status.
     // Let's use financialStatus for now as a proxy if no other status exists.
     const matchesStatus =
-      filterStatus === "all"
-        ? true
-        : (p.status || "Pending") === filterStatus;
+      filterStatus === "all" ? true : (p.status || "Pending") === filterStatus;
 
     return matchesDni && matchesGroup && matchesStatus;
   });
@@ -159,10 +169,14 @@ const Persons = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Approved": return "#10b981";
-      case "Rejected": return "#ef4444";
-      case "Pending": return "#f59e0b";
-      default: return "#6b7280";
+      case "Approved":
+        return "#10b981";
+      case "Rejected":
+        return "#ef4444";
+      case "Pending":
+        return "#f59e0b";
+      default:
+        return "#6b7280";
     }
   };
 
@@ -679,23 +693,23 @@ const Persons = () => {
                           p.status === "Approved"
                             ? "#dcfce7"
                             : p.status === "Moroso" || p.status === "Rejected"
-                              ? "#fee2e2"
-                              : "#fef3c7",
+                            ? "#fee2e2"
+                            : "#fef3c7",
                         color:
                           p.status === "Approved"
                             ? "#15803d"
                             : p.status === "Moroso" || p.status === "Rejected"
-                              ? "#991b1b"
-                              : "#92400e",
+                            ? "#991b1b"
+                            : "#92400e",
                       }}
                     >
                       {p.status === "Approved"
                         ? "Aprobado"
                         : p.status === "Moroso"
-                          ? "Moroso"
-                          : p.status === "Rejected"
-                            ? "Rechazado"
-                            : "Pendiente"}
+                        ? "Moroso"
+                        : p.status === "Rejected"
+                        ? "Rechazado"
+                        : "Pendiente"}
                     </span>
                   </td>
                   <td
@@ -727,7 +741,11 @@ const Persons = () => {
                       Ver
                     </button>
                     <button
-                      onClick={() => navigate(`/dashboard/current-accounts?personId=${p._id}`)}
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/current-accounts?personId=${p._id}`
+                        )
+                      }
                       style={{
                         color: "#059669",
                         fontWeight: "500",
@@ -751,7 +769,14 @@ const Persons = () => {
               ))}
               {filteredPersons.length === 0 && (
                 <tr>
-                  <td colSpan="4" style={{ padding: "24px", textAlign: "center", color: "#6b7280" }}>
+                  <td
+                    colSpan="4"
+                    style={{
+                      padding: "24px",
+                      textAlign: "center",
+                      color: "#6b7280",
+                    }}
+                  >
                     No se encontraron personas con los filtros seleccionados.
                   </td>
                 </tr>
@@ -790,7 +815,14 @@ const Persons = () => {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px",
+              }}
+            >
               <h3 style={{ fontSize: "20px", fontWeight: "bold", margin: 0 }}>
                 {isEditing ? "Editar Persona" : "Detalles de la Persona"}
               </h3>
@@ -800,7 +832,9 @@ const Persons = () => {
                     onClick={() => {
                       setEditFormData({
                         ...selectedPerson,
-                        group: selectedPerson.group ? selectedPerson.group._id : "",
+                        group: selectedPerson.group
+                          ? selectedPerson.group._id
+                          : "",
                       });
                       setIsEditing(true);
                     }}
@@ -812,7 +846,7 @@ const Persons = () => {
                       borderRadius: "6px",
                       cursor: "pointer",
                       fontSize: "14px",
-                      fontWeight: "500"
+                      fontWeight: "500",
                     }}
                   >
                     Editar
@@ -820,7 +854,13 @@ const Persons = () => {
                 )}
                 <button
                   onClick={() => setSelectedPerson(null)}
-                  style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#6b7280" }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    fontSize: "24px",
+                    cursor: "pointer",
+                    color: "#6b7280",
+                  }}
                 >
                   ×
                 </button>
@@ -829,59 +869,158 @@ const Persons = () => {
 
             {isEditing ? (
               <form onSubmit={handleUpdatePerson}>
-                <div style={{ marginBottom: "24px", display: "grid", gap: "16px" }}>
+                <div
+                  style={{ marginBottom: "24px", display: "grid", gap: "16px" }}
+                >
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Nombre Completo</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Nombre Completo
+                    </label>
                     <input
                       type="text"
                       className="input-field"
                       value={editFormData.fullName || ""}
-                      onChange={(e) => setEditFormData({ ...editFormData, fullName: e.target.value })}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          fullName: e.target.value,
+                        })
+                      }
                       required
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                      }}
                     />
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>DNI</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      DNI
+                    </label>
                     <input
                       type="text"
                       className="input-field"
                       value={editFormData.dni || ""}
-                      onChange={(e) => setEditFormData({ ...editFormData, dni: e.target.value })}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          dni: e.target.value,
+                        })
+                      }
                       required
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                      }}
                     />
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Dirección</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Dirección
+                    </label>
                     <input
                       type="text"
                       className="input-field"
                       value={editFormData.address || ""}
-                      onChange={(e) => setEditFormData({ ...editFormData, address: e.target.value })}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          address: e.target.value,
+                        })
+                      }
                       required
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                      }}
                     />
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Grupo</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Grupo
+                    </label>
                     <select
                       value={editFormData.group || ""}
-                      onChange={(e) => setEditFormData({ ...editFormData, group: e.target.value })}
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          group: e.target.value,
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                      }}
                     >
                       <option value="">Sin asignar</option>
                       {groups.map((g) => (
-                        <option key={g._id} value={g._id}>{g.name}</option>
+                        <option key={g._id} value={g._id}>
+                          {g.name}
+                        </option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Estado Financiero</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Estado Financiero
+                    </label>
                     <select
                       value={editFormData.financialStatus || "Unknown"}
-                      onChange={(e) => setEditFormData({ ...editFormData, financialStatus: e.target.value })}
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          financialStatus: e.target.value,
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                      }}
                     >
                       <option value="Unknown">Desconocido</option>
                       <option value="Good">Bueno</option>
@@ -889,22 +1028,63 @@ const Persons = () => {
                     </select>
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Observaciones</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Observaciones
+                    </label>
                     <textarea
                       value={editFormData.observation || ""}
-                      onChange={(e) => setEditFormData({ ...editFormData, observation: e.target.value })}
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px", minHeight: "80px" }}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          observation: e.target.value,
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                        minHeight: "80px",
+                      }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: "500", marginBottom: "4px" }}>Estado Manual (Opcional)</label>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Estado Manual (Opcional)
+                    </label>
                     <select
                       value={editFormData.status || ""}
-                      onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
-                      style={{ width: "100%", padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          status: e.target.value,
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "6px",
+                      }}
                     >
-                      <option value="">-- Automático (Basado en Chequeos) --</option>
+                      <option value="">
+                        -- Automático (Basado en Chequeos) --
+                      </option>
                       <option value="Pending">Pendiente</option>
                       <option value="Approved">Aprobado</option>
                       <option value="Rejected">Rechazado</option>
@@ -912,59 +1092,148 @@ const Persons = () => {
                       <option value="Active Loan">Préstamo Activo</option>
                       <option value="Moroso">Moroso</option>
                     </select>
-                    <p style={{ fontSize: "12px", color: "#6b7280", marginTop: "4px" }}>
-                      * Seleccione un estado para forzarlo manualmente. Deje en "Automático" para usar las verificaciones.
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        color: "#6b7280",
+                        marginTop: "4px",
+                      }}
+                    >
+                      * Seleccione un estado para forzarlo manualmente. Deje en
+                      "Automático" para usar las verificaciones.
                     </p>
                   </div>
 
-                  <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: "16px" }}>
-                    <h4 style={{ fontSize: "14px", color: "#6b7280", textTransform: "uppercase", marginBottom: "12px" }}>Verificaciones</h4>
+                  <div
+                    style={{
+                      borderTop: "1px solid #e5e7eb",
+                      paddingTop: "16px",
+                    }}
+                  >
+                    <h4
+                      style={{
+                        fontSize: "14px",
+                        color: "#6b7280",
+                        textTransform: "uppercase",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      Verificaciones
+                    </h4>
                     <div style={{ display: "grid", gap: "12px" }}>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="checkbox"
                           checked={editFormData.dniChecked || false}
-                          onChange={(e) => setEditFormData({ ...editFormData, dniChecked: e.target.checked })}
+                          onChange={(e) =>
+                            setEditFormData({
+                              ...editFormData,
+                              dniChecked: e.target.checked,
+                            })
+                          }
                         />
                         Documentación Completa (DNI)
                       </label>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="checkbox"
                           checked={editFormData.boletaServicioChecked || false}
-                          onChange={(e) => setEditFormData({ ...editFormData, boletaServicioChecked: e.target.checked })}
+                          onChange={(e) =>
+                            setEditFormData({
+                              ...editFormData,
+                              boletaServicioChecked: e.target.checked,
+                            })
+                          }
                         />
                         Boleta de Servicio
                       </label>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="checkbox"
                           checked={editFormData.garanteChecked || false}
-                          onChange={(e) => setEditFormData({ ...editFormData, garanteChecked: e.target.checked })}
+                          onChange={(e) =>
+                            setEditFormData({
+                              ...editFormData,
+                              garanteChecked: e.target.checked,
+                            })
+                          }
                         />
                         Garante
                       </label>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="checkbox"
-                          checked={editFormData.estadoFinancieroChecked || false}
-                          onChange={(e) => setEditFormData({ ...editFormData, estadoFinancieroChecked: e.target.checked })}
+                          checked={
+                            editFormData.estadoFinancieroChecked || false
+                          }
+                          onChange={(e) =>
+                            setEditFormData({
+                              ...editFormData,
+                              estadoFinancieroChecked: e.target.checked,
+                            })
+                          }
                         />
                         Estado Financiero Verificado
                       </label>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="checkbox"
                           checked={editFormData.carpetaCompletaChecked || false}
-                          onChange={(e) => setEditFormData({ ...editFormData, carpetaCompletaChecked: e.target.checked })}
+                          onChange={(e) =>
+                            setEditFormData({
+                              ...editFormData,
+                              carpetaCompletaChecked: e.target.checked,
+                            })
+                          }
                         />
                         Carpeta Completa
                       </label>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
                         <input
                           type="checkbox"
                           checked={editFormData.verificacionChecked || false}
-                          onChange={(e) => setEditFormData({ ...editFormData, verificacionChecked: e.target.checked })}
+                          onChange={(e) =>
+                            setEditFormData({
+                              ...editFormData,
+                              verificacionChecked: e.target.checked,
+                            })
+                          }
                         />
                         Verificación General
                       </label>
@@ -972,7 +1241,13 @@ const Persons = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "12px",
+                  }}
+                >
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
@@ -983,7 +1258,7 @@ const Persons = () => {
                       border: "none",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      fontWeight: "500"
+                      fontWeight: "500",
                     }}
                   >
                     Cancelar
@@ -997,7 +1272,7 @@ const Persons = () => {
                       border: "none",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      fontWeight: "500"
+                      fontWeight: "500",
                     }}
                   >
                     Guardar Cambios
@@ -1007,98 +1282,316 @@ const Persons = () => {
             ) : (
               <>
                 <div style={{ marginBottom: "24px" }}>
-                  <h4 style={{ fontSize: "14px", color: "#6b7280", textTransform: "uppercase", marginBottom: "8px" }}>Información Personal</h4>
-                  <p style={{ margin: "4px 0" }}><strong>Nombre:</strong> {selectedPerson.fullName}</p>
-                  <p style={{ margin: "4px 0" }}><strong>DNI:</strong> {selectedPerson.dni}</p>
-                  <p style={{ margin: "4px 0" }}><strong>Dirección:</strong> {selectedPerson.address}</p>
-                  <p style={{ margin: "4px 0" }}><strong>Grupo:</strong> {selectedPerson.group ? selectedPerson.group.name : "Sin asignar"}</p>
+                  <h4
+                    style={{
+                      fontSize: "14px",
+                      color: "#6b7280",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Información Personal
+                  </h4>
+                  <p style={{ margin: "4px 0" }}>
+                    <strong>Nombre:</strong> {selectedPerson.fullName}
+                  </p>
+                  <p style={{ margin: "4px 0" }}>
+                    <strong>DNI:</strong> {selectedPerson.dni}
+                  </p>
+                  <p style={{ margin: "4px 0" }}>
+                    <strong>Dirección:</strong> {selectedPerson.address}
+                  </p>
+                  <p style={{ margin: "4px 0" }}>
+                    <strong>Grupo:</strong>{" "}
+                    {selectedPerson.group
+                      ? selectedPerson.group.name
+                      : "Sin asignar"}
+                  </p>
                   {selectedPerson.observation && (
-                    <p style={{ margin: "4px 0" }}><strong>Observaciones:</strong> {selectedPerson.observation}</p>
+                    <p style={{ margin: "4px 0" }}>
+                      <strong>Observaciones:</strong>{" "}
+                      {selectedPerson.observation}
+                    </p>
                   )}
                 </div>
 
                 {selectedPersonAccount && (
-                  <div style={{ marginBottom: "24px", padding: "16px", backgroundColor: "#eff6ff", borderRadius: "8px", border: "1px solid #dbeafe" }}>
-                    <h4 style={{ fontSize: "14px", color: "#1e40af", textTransform: "uppercase", marginBottom: "8px", fontWeight: "bold" }}>Cuenta Corriente</h4>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", fontSize: "14px" }}>
+                  <div
+                    style={{
+                      marginBottom: "24px",
+                      padding: "16px",
+                      backgroundColor: "#eff6ff",
+                      borderRadius: "8px",
+                      border: "1px solid #dbeafe",
+                    }}
+                  >
+                    <h4
+                      style={{
+                        fontSize: "14px",
+                        color: "#1e40af",
+                        textTransform: "uppercase",
+                        marginBottom: "8px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Cuenta Corriente
+                    </h4>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: "8px",
+                        fontSize: "14px",
+                      }}
+                    >
                       <div>
                         <span style={{ color: "#6b7280" }}>Total:</span>
-                        <span style={{ marginLeft: "4px", fontWeight: "600", color: "#1e3a8a" }}>${selectedPersonAccount.totalAmount?.toLocaleString()}</span>
+                        <span
+                          style={{
+                            marginLeft: "4px",
+                            fontWeight: "600",
+                            color: "#1e3a8a",
+                          }}
+                        >
+                          ${selectedPersonAccount.totalAmount?.toLocaleString()}
+                        </span>
                       </div>
                       <div>
                         <span style={{ color: "#6b7280" }}>Pagado:</span>
-                        <span style={{ marginLeft: "4px", fontWeight: "600", color: "#15803d" }}>
-                          ${selectedPersonAccount.installments?.filter(i => i.status === 'paid').reduce((acc, curr) => acc + curr.amount, 0).toLocaleString()}
+                        <span
+                          style={{
+                            marginLeft: "4px",
+                            fontWeight: "600",
+                            color: "#15803d",
+                          }}
+                        >
+                          $
+                          {selectedPersonAccount.installments
+                            ?.filter((i) => i.status === "paid")
+                            .reduce((acc, curr) => acc + curr.amount, 0)
+                            .toLocaleString()}
                         </span>
                       </div>
                       <div>
                         <span style={{ color: "#6b7280" }}>Cuotas:</span>
-                        <span style={{ marginLeft: "4px", fontWeight: "600", color: "#1e3a8a" }}>{selectedPersonAccount.installments?.length}</span>
+                        <span
+                          style={{
+                            marginLeft: "4px",
+                            fontWeight: "600",
+                            color: "#1e3a8a",
+                          }}
+                        >
+                          {selectedPersonAccount.installments?.length}
+                        </span>
                       </div>
                       <div>
                         <span style={{ color: "#6b7280" }}>Estado:</span>
-                        <span style={{ marginLeft: "4px", fontWeight: "600", color: selectedPersonAccount.status === 'active' ? '#15803d' : '#b91c1c' }}>
-                          {selectedPersonAccount.status === 'active' ? 'Activa' : 'Inactiva'}
+                        <span
+                          style={{
+                            marginLeft: "4px",
+                            fontWeight: "600",
+                            color:
+                              selectedPersonAccount.status === "active"
+                                ? "#15803d"
+                                : "#b91c1c",
+                          }}
+                        >
+                          {selectedPersonAccount.status === "active"
+                            ? "Activa"
+                            : "Inactiva"}
                         </span>
                       </div>
                     </div>
                   </div>
                 )}
 
-                <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: "16px" }}>
-                  <h4 style={{ fontSize: "14px", color: "#6b7280", textTransform: "uppercase", marginBottom: "12px" }}>Verificaciones de Aprobación</h4>
+                <div
+                  style={{ borderTop: "1px solid #e5e7eb", paddingTop: "16px" }}
+                >
+                  <h4
+                    style={{
+                      fontSize: "14px",
+                      color: "#6b7280",
+                      textTransform: "uppercase",
+                      marginBottom: "12px",
+                    }}
+                  >
+                    Verificaciones de Aprobación
+                  </h4>
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "12px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <span>Documentación Completa (DNI)</span>
-                      <span style={{ color: selectedPerson.dniChecked ? "#10b981" : "#ef4444", fontWeight: "bold" }}>
-                        {selectedPerson.dniChecked ? "✓ Verificado" : "✗ Pendiente"}
+                      <span
+                        style={{
+                          color: selectedPerson.dniChecked
+                            ? "#10b981"
+                            : "#ef4444",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {selectedPerson.dniChecked
+                          ? "✓ Verificado"
+                          : "✗ Pendiente"}
                       </span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <span>Boleta de Servicio</span>
-                      <span style={{ color: selectedPerson.boletaServicioChecked ? "#10b981" : "#ef4444", fontWeight: "bold" }}>
-                        {selectedPerson.boletaServicioChecked ? "✓ Verificado" : "✗ Pendiente"}
+                      <span
+                        style={{
+                          color: selectedPerson.boletaServicioChecked
+                            ? "#10b981"
+                            : "#ef4444",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {selectedPerson.boletaServicioChecked
+                          ? "✓ Verificado"
+                          : "✗ Pendiente"}
                       </span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <span>Garante</span>
-                      <span style={{ color: selectedPerson.garanteChecked ? "#10b981" : "#ef4444", fontWeight: "bold" }}>
-                        {selectedPerson.garanteChecked ? "✓ Verificado" : "✗ Pendiente"}
+                      <span
+                        style={{
+                          color: selectedPerson.garanteChecked
+                            ? "#10b981"
+                            : "#ef4444",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {selectedPerson.garanteChecked
+                          ? "✓ Verificado"
+                          : "✗ Pendiente"}
                       </span>
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <span>Estado Financiero ({selectedPerson.financialStatus})</span>
-                      <span style={{ color: selectedPerson.estadoFinancieroChecked ? "#10b981" : "#ef4444", fontWeight: "bold" }}>
-                        {selectedPerson.estadoFinancieroChecked ? "✓ Verificado" : "✗ Pendiente"}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>
+                        Estado Financiero ({selectedPerson.financialStatus})
+                      </span>
+                      <span
+                        style={{
+                          color: selectedPerson.estadoFinancieroChecked
+                            ? "#10b981"
+                            : "#ef4444",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {selectedPerson.estadoFinancieroChecked
+                          ? "✓ Verificado"
+                          : "✗ Pendiente"}
                       </span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <span>Carpeta Completa</span>
-                      <span style={{ color: selectedPerson.carpetaCompletaChecked ? "#10b981" : "#ef4444", fontWeight: "bold" }}>
-                        {selectedPerson.carpetaCompletaChecked ? "✓ Completa" : "✗ Incompleta"}
+                      <span
+                        style={{
+                          color: selectedPerson.carpetaCompletaChecked
+                            ? "#10b981"
+                            : "#ef4444",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {selectedPerson.carpetaCompletaChecked
+                          ? "✓ Completa"
+                          : "✗ Incompleta"}
                       </span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <span>Verificación General</span>
-                      <span style={{ color: selectedPerson.verificacionChecked ? "#10b981" : "#ef4444", fontWeight: "bold" }}>
-                        {selectedPerson.verificacionChecked ? "✓ Aprobado" : "✗ Pendiente"}
+                      <span
+                        style={{
+                          color: selectedPerson.verificacionChecked
+                            ? "#10b981"
+                            : "#ef4444",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {selectedPerson.verificacionChecked
+                          ? "✓ Aprobado"
+                          : "✗ Pendiente"}
                       </span>
                     </div>
                   </div>
 
-                  <div style={{ marginTop: "24px", padding: "12px", backgroundColor: "#f3f4f6", borderRadius: "8px", textAlign: "center" }}>
-                    <p style={{ margin: 0, fontWeight: "500", color: "#374151" }}>
+                  <div
+                    style={{
+                      marginTop: "24px",
+                      padding: "12px",
+                      backgroundColor: "#f3f4f6",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{ margin: 0, fontWeight: "500", color: "#374151" }}
+                    >
                       Estado General:
-                      <span style={{ marginLeft: "8px", color: getStatusColor(selectedPerson.status || "Pending"), fontWeight: "bold" }}>
+                      <span
+                        style={{
+                          marginLeft: "8px",
+                          color: getStatusColor(
+                            selectedPerson.status || "Pending"
+                          ),
+                          fontWeight: "bold",
+                        }}
+                      >
                         {selectedPerson.status || "Pendiente"}
                       </span>
                     </p>
                   </div>
                 </div>
 
-                <div style={{ marginTop: "24px", display: "flex", justifyContent: "flex-end" }}>
+                <div
+                  style={{
+                    marginTop: "24px",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
                   <button
                     onClick={() => setSelectedPerson(null)}
                     style={{
@@ -1108,7 +1601,7 @@ const Persons = () => {
                       border: "none",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      fontWeight: "500"
+                      fontWeight: "500",
                     }}
                   >
                     Cerrar
