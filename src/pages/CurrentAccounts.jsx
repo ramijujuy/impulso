@@ -244,7 +244,7 @@ const CurrentAccounts = () => {
                         Vencimiento: new Date(inst.dueDate).toLocaleDateString(),
                         Monto: inst.amount,
                         "Monto Pagado": inst.status === 'paid' ? inst.amount : (inst.amountPaid || 0),
-                        "Fecha Pago": inst.paidDate ? new Date(inst.paidDate).toLocaleDateString() : "-",
+                        "Fecha Pago": inst.paidDate ? new Date(inst.paidDate).toLocaleDateString() : "Impaga",
                         Estado: inst.status
                     });
                 });
