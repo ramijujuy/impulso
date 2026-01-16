@@ -250,8 +250,11 @@ const CurrentAccounts = () => {
                 });
             });
             const ws = XLSX.utils.json_to_sheet(dataToExport);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Cuentas");
+            // Manual workbook creation to avoid book_new issues
+            const wb = {
+                SheetNames: ["Cuentas"],
+                Sheets: { "Cuentas": ws }
+            };
             XLSX.writeFile(wb, `cuentas_${viewType === 'person' ? 'individuales' : 'grupales'}.xlsx`);
         } else {
             // Export collections
@@ -264,8 +267,10 @@ const CurrentAccounts = () => {
                 });
             });
             const ws = XLSX.utils.json_to_sheet(dataToExport);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Cobranzas");
+            const wb = {
+                SheetNames: ["Cobranzas"],
+                Sheets: { "Cobranzas": ws }
+            };
             XLSX.writeFile(wb, "cobranzas.xlsx");
         }
 
