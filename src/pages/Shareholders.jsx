@@ -28,10 +28,6 @@ const Shareholders = () => {
 
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  useEffect(() => {
-    fetchShareholders();
-  }, [fetchShareholders]);
-
   const fetchShareholders = useCallback(async () => {
     try {
       const res = await axios.get("/api/shareholders", {
@@ -43,6 +39,10 @@ const Shareholders = () => {
       setMsg("❌ Error al cargar accionistas");
     }
   }, [token]);
+
+  useEffect(() => {
+    fetchShareholders();
+  }, [fetchShareholders]);
 
   const fetchShareholderAccount = async (shareholderId) => {
     try {
@@ -195,21 +195,19 @@ const Shareholders = () => {
           </button>
           <div className="flex space-x-3 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
             <button
-              className={`px-4 py-2 rounded-md text-sm font-medium transition ${
-                activeTab === "list"
+              className={`px-4 py-2 rounded-md text-sm font-medium transition ${activeTab === "list"
                   ? "bg-primary-50 text-primary-700 shadow-sm ring-1 ring-primary-200"
                   : "text-gray-600 hover:bg-gray-50"
-              }`}
+                }`}
               onClick={() => setActiveTab("list")}
             >
               Listado y Cuentas
             </button>
             <button
-              className={`px-4 py-2 rounded-md text-sm font-medium transition ${
-                activeTab === "profits"
+              className={`px-4 py-2 rounded-md text-sm font-medium transition ${activeTab === "profits"
                   ? "bg-primary-50 text-primary-700 shadow-sm ring-1 ring-primary-200"
                   : "text-gray-600 hover:bg-gray-50"
-              }`}
+                }`}
               onClick={() => {
                 setActiveTab("profits");
                 fetchProfits();
@@ -223,11 +221,10 @@ const Shareholders = () => {
 
       {msg && (
         <div
-          className={`p-4 mb-6 rounded-lg border ${
-            msg.includes("✓")
+          className={`p-4 mb-6 rounded-lg border ${msg.includes("✓")
               ? "bg-green-50 border-green-200 text-green-800"
               : "bg-red-50 border-red-200 text-red-800"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2">
             <span>{msg}</span>
@@ -409,11 +406,10 @@ const Shareholders = () => {
                     {shareholders.map((s) => (
                       <tr
                         key={s._id}
-                        className={`hover:bg-gray-50 transition ${
-                          selectedShareholder?._id === s._id
+                        className={`hover:bg-gray-50 transition ${selectedShareholder?._id === s._id
                             ? "bg-blue-50/50"
                             : ""
-                        }`}
+                          }`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {s.fullName}
@@ -519,7 +515,7 @@ const Shareholders = () => {
                 </h4>
 
                 {shareholderAccount.contributions &&
-                shareholderAccount.contributions.length > 0 ? (
+                  shareholderAccount.contributions.length > 0 ? (
                   <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                     {shareholderAccount.contributions.map((contrib, idx) => (
                       <div
@@ -531,11 +527,10 @@ const Shareholders = () => {
                             {contrib.groupName}
                           </span>
                           <span
-                            className={`text-xs px-2 py-1 rounded-full font-medium ${
-                              contrib.loanStatus === "Active"
+                            className={`text-xs px-2 py-1 rounded-full font-medium ${contrib.loanStatus === "Active"
                                 ? "bg-blue-100 text-blue-700"
                                 : "bg-green-100 text-green-700"
-                            }`}
+                              }`}
                           >
                             {contrib.loanStatus === "Active"
                               ? "Activo"
@@ -720,11 +715,11 @@ const Shareholders = () => {
                               <span className="text-gray-600 text-left w-20">
                                 {profitType === "projected"
                                   ? `Vence: ${new Date(
-                                      d.dueDate
-                                    ).toLocaleDateString()}`
+                                    d.dueDate
+                                  ).toLocaleDateString()}`
                                   : `Pagado: ${new Date(
-                                      d.paidDate
-                                    ).toLocaleDateString()}`}
+                                    d.paidDate
+                                  ).toLocaleDateString()}`}
                               </span>
                               <span className="text-gray-500" title="Capital">
                                 Cap: ${d.capitalRecovered?.toFixed(2)}
