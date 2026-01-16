@@ -15,6 +15,7 @@ const Home = () => {
     ];
 
     const handleBackup = async () => {
+        console.log("VERSION V2 (FIXED)");
         setBackupLoading(true);
         try {
             const headers = { Authorization: `Bearer ${token}` };
