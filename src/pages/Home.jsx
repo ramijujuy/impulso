@@ -15,7 +15,7 @@ const Home = () => {
       color: "bg-blue-500",
     },
     {
-      label: "PrÃ©stamos",
+      label: "Préstamos",
       value: "Gestionar",
       link: "/dashboard/loans",
       color: "bg-green-500",
@@ -287,7 +287,7 @@ const Home = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4">
-            Accesos RÃ¡pidos
+            Accesos Rápidos
           </h3>
           <div className="space-y-3">
             <Link
@@ -295,7 +295,7 @@ const Home = () => {
               className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
             >
               <span className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full mr-3">
-                ðŸ‘¥
+                👥
               </span>
               <div>
                 <p className="font-medium text-gray-900">Gestionar Grupos</p>
@@ -309,12 +309,12 @@ const Home = () => {
               className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
             >
               <span className="w-8 h-8 flex items-center justify-center bg-green-100 text-green-600 rounded-full mr-3">
-                ðŸ’°
+                💰
               </span>
               <div>
-                <p className="font-medium text-gray-900">Otorgar PrÃ©stamo</p>
+                <p className="font-medium text-gray-900">Otorgar Préstamo</p>
                 <p className="text-xs text-gray-500">
-                  Crear nuevos prÃ©stamos para grupos
+                  Crear nuevos préstamos para grupos
                 </p>
               </div>
             </Link>
@@ -324,12 +324,12 @@ const Home = () => {
         <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-lg p-6 text-white">
           <h3 className="text-lg font-bold mb-2">Estado del Sistema</h3>
           <p className="text-slate-300 text-sm mb-6">
-            El sistema estÃ¡ funcionando correctamente. Todas las conexiones
-            seguras estÃ¡n activas.
+            El sistema está funcionando correctamente. Todas las conexiones
+            seguras están activas.
           </p>
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            <span>En lÃ­nea</span>
+            <span>En línea</span>
           </div>
         </div>
       </div>
