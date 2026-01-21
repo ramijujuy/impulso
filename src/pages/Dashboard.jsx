@@ -5,12 +5,18 @@ import AuthContext from "../context/AuthContext";
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when navigating
+  const handleNavClick = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
-  
+
 
   const navItems = [
     { path: "/dashboard", label: "Inicio", end: true },
@@ -27,13 +33,6 @@ const Dashboard = () => {
     navItems.push({ path: "/dashboard/persons", label: "Personas" });
   }
 
-  return (
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Close mobile menu when navigating
-  const handleNavClick = () => {
-    setIsMobileMenuOpen(false);
-  };
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans overflow-hidden">
