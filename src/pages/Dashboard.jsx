@@ -10,6 +10,7 @@ const Dashboard = () => {
     logout();
     navigate("/login");
   };
+  
 
   const navItems = [
     { path: "/dashboard", label: "Inicio", end: true },

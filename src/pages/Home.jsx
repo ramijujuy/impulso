@@ -43,7 +43,8 @@ const Home = () => {
       alert("Iniciando Backup... (V3 FIXED)");
 
       // Base URL configuration (matches logic in src/index.js)
-      const API_URL = process.env.REACT_APP_API_URL || "https://financieraback.vercel.app";
+      const API_URL =
+        process.env.REACT_APP_API_URL || "https://financieraback.vercel.app";
 
       // Helper to handle fetch errors
       const fetchJson = async (endpoint) => {
@@ -54,7 +55,9 @@ const Home = () => {
           return JSON.parse(text);
         } catch (e) {
           console.error(`Error parsing JSON from ${url}:`, text.slice(0, 100));
-          throw new Error(`Error en ${url}: Recibido HTML/Texto en lugar de JSON. Inicio: ${text.slice(0, 20)}...`);
+          throw new Error(
+            `Error en ${url}: Recibido HTML/Texto en lugar de JSON. Inicio: ${text.slice(0, 20)}...`,
+          );
         }
       };
 
@@ -88,7 +91,7 @@ const Home = () => {
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(usersData),
-          "Usuarios"
+          "Usuarios",
         );
       }
 
@@ -102,15 +105,18 @@ const Home = () => {
           Group: p.group?.name || "-",
           Status: p.status,
           FinancialStatus: p.financialStatus,
-          Checks: `DNI:${p.dniChecked ? "Y" : "N"}, Fin:${p.estadoFinancieroChecked ? "Y" : "N"
-            }, Carp:${p.carpetaCompletaChecked ? "Y" : "N"}, Bol:${p.boletaServicioChecked ? "Y" : "N"
-            }, Gar:${p.garanteChecked ? "Y" : "N"}, Ver:${p.verificacionChecked ? "Y" : "N"
-            }`,
+          Checks: `DNI:${p.dniChecked ? "Y" : "N"}, Fin:${
+            p.estadoFinancieroChecked ? "Y" : "N"
+          }, Carp:${p.carpetaCompletaChecked ? "Y" : "N"}, Bol:${
+            p.boletaServicioChecked ? "Y" : "N"
+          }, Gar:${p.garanteChecked ? "Y" : "N"}, Ver:${
+            p.verificacionChecked ? "Y" : "N"
+          }`,
         }));
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(personsData),
-          "Personas"
+          "Personas",
         );
       }
 
@@ -126,7 +132,7 @@ const Home = () => {
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(groupsData),
-          "Grupos"
+          "Grupos",
         );
       }
 
@@ -143,7 +149,7 @@ const Home = () => {
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(loansData),
-          "Prestamos"
+          "Prestamos",
         );
       }
 
@@ -158,7 +164,7 @@ const Home = () => {
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(shData),
-          "Accionistas"
+          "Accionistas",
         );
       }
 
@@ -175,7 +181,7 @@ const Home = () => {
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(accData),
-          "CuentasCorrientes"
+          "CuentasCorrientes",
         );
 
         // 7. Detailed Installments Sheet
@@ -205,7 +211,7 @@ const Home = () => {
         XLSX.utils.book_append_sheet(
           wb,
           XLSX.utils.json_to_sheet(allInstallments),
-          "DetalleCuotas"
+          "DetalleCuotas",
         );
       }
 
@@ -234,10 +240,11 @@ const Home = () => {
         <button
           onClick={handleBackup}
           disabled={backupLoading}
-          className={`px-4 py-2 rounded-lg font-medium text-white shadow-sm flex items-center gap-2 ${backupLoading
+          className={`px-4 py-2 rounded-lg font-medium text-white shadow-sm flex items-center gap-2 ${
+            backupLoading
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-indigo-600 hover:bg-indigo-700"
-            }`}
+          }`}
         >
           {backupLoading ? (
             "Generando..."
