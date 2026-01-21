@@ -281,15 +281,15 @@ const Groups = () => {
   });
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Gestión de Grupos</h2>
           <p className="text-gray-500 mt-1">Consulte el estado y composición de los grupos de crédito.</p>
         </div>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className={`px-4 py-2 text-white rounded-lg font-medium transition shadow-sm ${showCreateForm ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'}`}
+          className={`px-4 py-2 text-white rounded-lg font-medium transition shadow-sm w-full md:w-auto ${showCreateForm ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
           {showCreateForm ? "Cancelar" : "+ Nuevo Grupo"}
         </button>
@@ -449,7 +449,7 @@ const Groups = () => {
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {g.totalDebt ? `$${g.totalDebt.toLocaleString()}` : "-"}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm">
+                    <td className="px-6 py-4 text-right text-sm whitespace-nowrap">
                       {g.status === "Active" && (
                         <button
                           onClick={() => setLoanModal({ groupId: g._id, groupName: g.name })}
