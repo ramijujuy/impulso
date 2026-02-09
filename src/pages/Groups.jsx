@@ -257,6 +257,26 @@ const Groups = () => {
     }
   };
 
+  const handleSyncStatuses = async () => {
+    if (
+      !window.confirm(
+        "¿Desea sincronizar todos los estados de préstamos? Esto corregirá los grupos que quedaron trabados en 'Préstamo Activo' pero ya no tienen deuda.",
+      )
+    )
+      return;
+    setLoading(true);
+    try {
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const res = await axios.post("/api/groups/sync-all-loan-statuses", {}, config);
+      setMsg(`✓ Se sincronizaron los estados. Grupos corregidos: ${res.data.count}`);
+      fetchGroups();
+    } catch (error) {
+      setMsg("Error al sincronizar estados");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleUpdateGroupName = async (groupId, currentName) => {
     const newName = window.prompt(
       "Ingrese el nuevo nombre del grupo:",
@@ -300,10 +320,10 @@ const Groups = () => {
         ? true
         : appliedSearch.status === "inactive"
           ? g.status !== "Active" &&
-            g.status !== "Active Loan" &&
-            g.status !== "Approved" &&
-            !g.isMoroso &&
-            g.status !== "Pending"
+          g.status !== "Active Loan" &&
+          g.status !== "Approved" &&
+          !g.isMoroso &&
+          g.status !== "Pending"
           : appliedSearch.status === "Moroso"
             ? g.isMoroso
             : g.status === appliedSearch.status;
@@ -427,10 +447,18 @@ const Groups = () => {
                 className="input-field w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
-            <div>
+            <div className="flex gap-2">
               <button
-                onClick={handleApplyFilters}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition font-medium h-[42px]"
+                onClick={handleSyncStatuses}
+                disabled={loading}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition shadow-sm disabled:bg-purple-300"
+                title="Sincronizar estados de préstamos y deuda"
+              >
+                {loading ? "Sincronizando..." : "Sincronizar Estados"}
+              </button>
+              <button
+                onClick={() => setAppliedSearch({ name: searchName, status: filterStatus })}
+                className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition shadow-sm"
               >
                 Aplicar Filtros
               </button>
@@ -486,8 +514,7 @@ const Groups = () => {
                     <td className="px-6 py-4">
                       <div className="flex flex-col gap-1 items-start">
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            g.status === "Active" || g.status === "Approved"
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${g.status === "Active" || g.status === "Approved"
                               ? "bg-green-100 text-green-800"
                               : g.status === "Active Loan"
                                 ? "bg-blue-100 text-blue-800"
@@ -496,7 +523,7 @@ const Groups = () => {
                                   : g.status === "Pending"
                                     ? "bg-yellow-100 text-yellow-800"
                                     : "bg-gray-100 text-gray-800"
-                          }`}
+                            }`}
                         >
                           {g.status === "Active"
                             ? "Activo"
