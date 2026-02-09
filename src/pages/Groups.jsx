@@ -450,7 +450,7 @@ const Groups = () => {
                       {g.totalDebt ? `$${g.totalDebt.toLocaleString()}` : "-"}
                     </td>
                     <td className="px-6 py-4 text-right text-sm whitespace-nowrap">
-                      {g.status === "Active" && (
+                      {(g.status === "Active" || g.status === "Approved") && (
                         <button
                           onClick={() => setLoanModal({ groupId: g._id, groupName: g.name })}
                           className="text-green-600 hover:text-green-800 font-medium mr-3 hover:underline"
