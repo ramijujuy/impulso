@@ -188,9 +188,6 @@ const Groups = () => {
     fetchGroups();
   }, []);
 
-  const handleApplyFilters = () => {
-    setAppliedSearch({ name: searchName, status: filterStatus });
-  };
 
   const createGroup = async (e) => {
     e.preventDefault();
@@ -515,14 +512,14 @@ const Groups = () => {
                       <div className="flex flex-col gap-1 items-start">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${g.status === "Active" || g.status === "Approved"
-                              ? "bg-green-100 text-green-800"
-                              : g.status === "Active Loan"
-                                ? "bg-blue-100 text-blue-800"
-                                : g.status === "Rejected"
-                                  ? "bg-red-100 text-red-800"
-                                  : g.status === "Pending"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-gray-100 text-gray-800"
+                            ? "bg-green-100 text-green-800"
+                            : g.status === "Active Loan"
+                              ? "bg-blue-100 text-blue-800"
+                              : g.status === "Rejected"
+                                ? "bg-red-100 text-red-800"
+                                : g.status === "Pending"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-gray-100 text-gray-800"
                             }`}
                         >
                           {g.status === "Active"
